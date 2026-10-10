@@ -1,0 +1,6 @@
+streamlit
+openai
+pypdf
+python-docx
+numpy
+python-dotenv
