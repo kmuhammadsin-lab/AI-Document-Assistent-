@@ -57,36 +57,54 @@ with st.sidebar:
             assistant.delete_document(name)
             st.rerun()
 
+```python
 st.subheader("Ask your documents")
-question = st.text_input("Question", placeholder="What does the document say about ...?")
+
+question = st.text_input(
+    "Question",
+    placeholder="What does the document say about ...?"
+)
+
 if st.button("Ask", type="primary") and question.strip():
+
     if not api_key:
-        st.error("Set OPENAI_API_KEY in .env first.")
+        st.error("Set OPENAI_API_KEY in your .env first.")
+
     else:
         with st.spinner("Searching documents and generating an answer..."):
+
             try:
                 result = assistant.answer(question.strip())
+
                 st.markdown("### Answer")
                 st.write(result["answer"])
-                st.caption(f"Retrieved {len(result['sources'])} source chunk(s).")
+
+                st.caption(
+                    f"Retrieved {len(result['sources'])} source chunk(s)."
+                )
+
                 st.markdown("### Sources")
+
                 if not result["sources"]:
                     st.write("No relevant document chunks were found.")
+
                 for i, source in enumerate(result["sources"], 1):
                     page = source["metadata"].get("page")
                     page_text = f" · Page {page}" if page else ""
-                    with st.expander(f"{i}. {source['metadata']['file_name']}{page_text}"):
+
+                    with st.expander(
+                        f"{i}. {source['metadata']['file_name']}{page_text}"
+                    ):
                         st.write(source["text"])
+
                         st.caption(
                             f"Semantic score: {source['semantic_score']:.3f} | "
                             f"Keyword score: {source['keyword_score']:.3f}"
                         )
 
-try:
-    text = extract_text(uploaded_file)
-    st.write(text)
-
-except Exception as e:
-    st.error(f"Error: {e}")
+            except Exception as e:
+                st.error(f"An error occurred: {e}")
 
 st.markdown("---")
+```
+
