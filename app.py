@@ -82,5 +82,11 @@ if st.button("Ask", type="primary") and question.strip():
                             f"Keyword score: {source['keyword_score']:.3f}"
                         )
 
+try:
+    text = extract_text(uploaded_file)
+    st.write(text)
+
+except Exception as e:
+    st.error(f"Error: {e}")
+
 st.markdown("---")
-st.caption("Files are processed locally; text and questions are sent to the OpenAI API for embeddings and answers.")
